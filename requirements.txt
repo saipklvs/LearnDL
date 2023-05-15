@@ -1,0 +1,10 @@
+matplotlib
+pandas
+torch 
+torchvision 
+torchaudio
+boto3
+botocore
+# Install dependencies
+ipython
+pysoundfile
