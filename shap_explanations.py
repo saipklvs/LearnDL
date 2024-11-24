@@ -32,13 +32,14 @@ storage_path_predictions = "temp/saved_predictions/"
 os.makedirs(storage_path_predictions, exist_ok=True)
 
 # Save the predictions to a CSV file
+X_test = X_test.reset_index(drop=True)
 combined_df = pd.concat([X_test, pd.Series(y_test, name="True Class"), pd.Series(y_pred, name="Predicted Class")], axis=1)
 combined_df.to_csv(os.path.join(storage_path_predictions, "predictions.csv"), index=False)
 
 
 # Use KernelExplainer for SHAP values computation
 # KernelExplainer is purely CPU-based and does not require GPU dependencies
-explainer = shap.KernelExplainer(rf_clf.predict_proba, X_train.sample(50, random_state=42))  # Small sample for baseline
+explainer = shap.KernelExplainer(rf_clf.predict_proba, X_train)  # Small sample for baseline
 shap_values = explainer.shap_values(X_test)
 
 print("SHAP Values Shape:")
