@@ -8,3 +8,5 @@ botocore
 # Install dependencies
 ipython
 pysoundfile
+shap
+scikit-learn
