@@ -26,6 +26,16 @@ y_pred = rf_clf.predict(X_test)
 print("Classification Report:")
 print(classification_report(y_test, y_pred, target_names=iris.target_names))
 
+## save the predictions in a temp predictions file
+# Create the temp directory if it doesn't exist
+storage_path_predictions = "temp/saved_predictions/"
+os.makedirs(storage_path_predictions, exist_ok=True)
+
+# Save the predictions to a CSV file
+combined_df = pd.concat([X_test, pd.Series(y_test, name="True Class"), pd.Series(y_pred, name="Predicted Class")], axis=1)
+combined_df.to_csv(os.path.join(storage_path_predictions, "predictions.csv"), index=False)
+
+
 # Use KernelExplainer for SHAP values computation
 # KernelExplainer is purely CPU-based and does not require GPU dependencies
 explainer = shap.KernelExplainer(rf_clf.predict_proba, X_train.sample(50, random_state=42))  # Small sample for baseline
@@ -53,30 +63,6 @@ os.makedirs(storage_path_waterfall, exist_ok=True)
 
 re_index_x_test = X_test.reset_index(drop=True)
 print(re_index_x_test.iloc[0, :])
-
-# Plot SHAP Waterfall plots for each instance in X_test
-# for i in range(X_test.shape[0]):
-#     print(f"SHAP Waterfall plot for instance {i}")
-#     shap.waterfall_plot(
-#         shap.Explanation(values=shap_values[i][:, 0],  # SHAP values for 1st class (index 1)
-#                          base_values=explainer.expected_value[1],
-#                          data=X_test.iloc[i],
-#                          feature_names=X_train.columns),
-#     )
-#     plt.show()
-
-# Plot SHAP Waterfall plots for each instance in X_test
-# for i in range(X_test.shape[0]):
-#     print(f"SHAP Waterfall plot for instance {i}")
-#     shap.waterfall_plot(
-#         shap.Explanation(values=shap_values[i][:, 0],  # SHAP values for the 2nd class (index 1)
-#                          base_values=explainer.expected_value[0],
-#                          data=X_test.iloc[i],
-#                          feature_names=X_train.columns),
-#     )
-#     plt.title(f"SHAP Waterfall Plot for Instance: {i}")
-#     plt.savefig(os.path.join(storage_path_waterfall, f"shap_waterfall_plot_instance_{i}.png"))
-#     plt.close()
 
 # Plot SHAP Waterfall plots for each instance in X_test
 for i in range(X_test.shape[0]):

@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 from PIL import Image
+import pandas as pd
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
@@ -10,6 +11,7 @@ choice = st.sidebar.radio("Go to", options)
 # Paths to the saved plots
 summary_path = "temp/summary/"
 waterfall_path = "temp/waterfall/"
+saved_predictions_path = "temp/saved_predictions/"
 
 if choice == "Summary Plots":
     st.title("SHAP Summary Plots")
@@ -19,8 +21,8 @@ if choice == "Summary Plots":
 
 elif choice == "Predicted Data":
     st.title("Predicted Data")
-    # Load and display the predicted data
-    # ...existing code to load and display predicted data...
+    predictions_df = pd.read_csv(os.path.join(saved_predictions_path, "predictions.csv"))
+    st.dataframe(predictions_df, width=1000, height=500, use_container_width=True)
 
 elif choice == "Individual Plots":
     st.title("SHAP Individual Waterfall Plots")

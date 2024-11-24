@@ -10,3 +10,4 @@ ipython
 pysoundfile
 shap
 scikit-learn
+streamlit
